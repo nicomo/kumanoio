@@ -212,7 +212,7 @@ func (v UsersResource) Update(c buffalo.Context) error {
 	}
 
 	// If there are no errors set a success message
-	c.Flash().Add("success", "User was updated successfully")
+	c.Flash().Add("success", T.Translate(c, "user.updated.success"))
 
 	// and redirect to the users index page
 	return c.Render(200, r.Auto(c, user))

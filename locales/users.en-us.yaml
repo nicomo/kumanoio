@@ -1,5 +1,5 @@
 - id: "user.updated.success"
-  translation: "User was successfully updated."
+  translation: "Account successfully updated, cool. 🕶️"
 - id: "user.destroyed.success"
   translation: "User account destroyed as ordered. Let's have a 🥃."
 - id: "users.sendinvitation.failure"
