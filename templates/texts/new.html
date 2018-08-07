@@ -1,0 +1,8 @@
+<div class="page-header">
+  <h1>New Text</h1>
+</div>
+
+<%= form_for(text, {action: textsPath(), method: "POST"}) { %>
+  <%= partial("texts/form.html") %>
+  <a href="<%= textsPath() %>" class="btn btn-warning" data-confirm="Are you sure?">Cancel</a>
+<% } %>

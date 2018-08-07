@@ -12,3 +12,5 @@ kumano
 .vscode/
 .grifter/
 .env
+
+database.yml

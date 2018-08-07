@@ -1,0 +1,7 @@
+create_table("texts", func(t) {
+	t.Column("id", "uuid", {"primary": true})
+	t.Column("title", "string", {})
+	t.Column("content", "text", {})
+	t.Column("author_id", "uuid", {})
+	t.Column("draft", "bool", {"default": false})
+})

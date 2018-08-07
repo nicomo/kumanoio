@@ -1,0 +1,40 @@
+<%= partial("header.html") %>
+
+<!-- user profile info -->
+<div class="row">
+  <div class="col-md-1 col-sm-2 col-xs-2 logo">
+      <img src="<%= user.AvatarURL %>" alt="avatar" class="avatar avatar-100">
+  </div>
+  <div class="col-md-4">
+    <h4><%= user.Name %>
+      <small class="text-muted">@<%= user.Nickname %></small>
+    </h4>
+    <p>via <%= user.Provider.String %> since <%= user.CreatedAt %></p>
+    <p class="text"><%= user.Bio %></p>
+    <%= if(is_self()) { %>
+      <ul class="list-unstyled list-inline">
+        <li><a href="<%= editUserPath({ user_id: user.ID })%>" class="btn btn-warning">Edit</a></li>
+        <li><a href="<%= userPath({ user_id: user.ID })%>" data-method="DELETE" data-confirm="Are you sure?" class="btn btn-danger">Delete Account</a>
+      </ul>
+    <% } %>
+  </div>
+  <div class="col-md-6">
+    <%= if(can_invite() && (is_self()))  { %>
+      <h4>Invite a friend to join Kumano</h4>
+      <%= form({action: usersPath(), method: "POST", class: "form-inline"}) { %>
+        <%= partial("users/form.html") %>
+      </form> <% }%>
+    <% } 
+    <%= if (is_admin()) { %>
+      <p><%= user %></p>
+    <% } %>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <p>Cupcake ipsum dolor sit amet bear claw apple pie liquorice sweet roll. Tiramisu croissant cake chupa chups halvah candy jujubes marshmallow. Pie halvah liquorice cheesecake brownie fruitcake soufflé sugar plum. Icing macaroon marshmallow cake liquorice candy croissant wafer cookie. Candy canes chocolate cake lollipop. Halvah cake croissant cheesecake sweet roll pie dragée bear claw. Sesame snaps cake tart pudding icing cake. Apple pie marshmallow cotton candy jelly-o jelly beans dragée liquorice jelly-o. Sweet soufflé cotton candy apple pie danish cake chocolate sweet roll. Chocolate cake cheesecake carrot cake topping muffin gummies. Cookie carrot cake sweet croissant candy canes. Chocolate bar macaroon sesame snaps tootsie roll tiramisu tootsie roll. Chupa chups gummi bears jujubes gummi bears macaroon caramels topping cake. Cotton candy pastry cake.</p>
+    <p>Chocolate jujubes danish soufflé jelly liquorice candy canes marzipan. Cheesecake halvah bonbon cake sugar plum ice cream cotton candy croissant tiramisu. Lemon drops chocolate biscuit cotton candy gummi bears cheesecake gummies. Sweet liquorice pie brownie. Topping jelly dessert chocolate cake candy canes halvah gummi bears soufflé. Macaroon chocolate cake sesame snaps liquorice cake. Tootsie roll cake pudding dragée cookie wafer icing bonbon. Cake ice cream apple pie sweet gingerbread. Sugar plum gummi bears gummi bears marshmallow marzipan danish. Cake toffee candy canes jelly. Cake tootsie roll dessert gummi bears. Ice cream lemon drops donut ice cream cake toffee danish. Marshmallow halvah jelly beans.</p>
+  </div>
+</div>
+  
+ 

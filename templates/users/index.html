@@ -1,0 +1,34 @@
+<%= partial("header.html") %>
+
+<table class="table table-striped">
+  <thead>
+    <th>Name</th>
+    <th>Nickname</th>
+    <th>Provider</th>
+    <th>Since</th>
+    <th>IsAdmin</th>
+    <th>&nbsp;</th>
+  </thead>
+  <tbody>
+    <%= for (user) in users { %>
+      <tr>
+      <td><%= user.Name %></td>
+        <td><%= user.Nickname %></td>
+        <td><%= user.Provider.String %>/<%= user.ProviderID.String %></td>
+        <td><%= user.SignedUpAt %></td>
+        <td><%= user.IsAdmin %></td>
+        <td>
+          <div class="pull-right">
+            <a href="<%= userPath({ user_id: user.ID }) %>" class="btn btn-info">View</a>
+            <a href="<%= editUserPath({ user_id: user.ID }) %>" class="btn btn-warning">Edit</a>
+            <a href="<%= userPath({ user_id: user.ID }) %>" data-method="DELETE" data-confirm="Are you sure?" class="btn btn-danger">Destroy</a>
+          </div>
+        </td>
+      </tr>
+    <% } %>
+  </tbody>
+</table>
+
+<div class="text-center">
+  <%= paginator(pagination) %>
+</div>

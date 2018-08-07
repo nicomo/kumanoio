@@ -1,0 +1,8 @@
+<div class="page-header">
+  <h1>Edit Text</h1>
+</div>
+
+<%= form_for(text, {action: textPath({ text_id: text.ID }), method: "PUT"}) { %>
+  <%= partial("texts/form.html") %>
+  <a href="<%= textPath({ text_id: text.ID }) %>" class="btn btn-warning" data-confirm="Are you sure?">Cancel</a>
+<% } %>

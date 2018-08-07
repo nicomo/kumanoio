@@ -1,0 +1,6 @@
+- id: "text.created.success"
+  translation: "Text was successfully created."
+- id: "text.updated.success"
+  translation: "Text was successfully updated."
+- id: "text.destroyed.success"
+  translation: "Text was successfully destroyed."

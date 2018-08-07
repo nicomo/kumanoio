@@ -1,0 +1,6 @@
+- id: "auth.invitation.failure"
+  translation: "Already have an account? Sign in. Don't? You need an invitation to create one."
+- id: "auth.callback.failure"
+  translation: "Could neither sign you in, nor sign you up. 😟"
+- id: "auth.destroy.success"
+  translation: "Ha det, see you again soon. 👋"

@@ -1,3 +1,208 @@
 @import "~bootstrap-sass/assets/stylesheets/_bootstrap-sprockets.scss";
 @import "~bootstrap-sass/assets/stylesheets/_bootstrap.scss";
 @import "~font-awesome/css/font-awesome.css";
+@import url('https://fonts.googleapis.com/css?family=Roboto:400,700|Vollkorn:400,400i&subset=latin-ext');
+
+
+/*
+Primary color : #2e7d32
+Primary color light : #60ad5e
+Primary color dark : #005005
+Secondary color : #4e342e
+Secondary color light : #7b5e57
+Secondary color dark : #260e04
+Text on theme colors : #fff
+*/
+
+
+  body {
+      font-family: 'Roboto', sans-serif;        
+  }
+
+  header {
+    border-bottom: solid 1px rgba(120,94,87,0.33);
+    margin-bottom: 1em;
+  }
+
+  .signin-list {
+      list-style-type: none;
+  }
+
+  .signin-btn {
+      margin-bottom: 0.36em;
+  }
+  a.dropdown-item:hover {
+      text-decoration: none;
+  }
+  
+  textarea:focus, input:focus {
+    border: 2px solid #7b5e57;
+  }
+
+  * {
+    -webkit-transition: all .38s;
+    /* Safari */
+    transition: all .38s;
+  }
+
+  .container {
+    min-width: 320px;
+  }
+
+  header {
+    padding: 10px 20px;
+    box-sizing: border-box;
+  }
+
+  .logo img {
+    width: 80px;
+    margin-bottom: 5px;
+    margin-top: 5px;
+  }
+
+  .titles h1 {
+    font-size: 30px;
+    font-weight: 300;
+    color: #2e7d32;
+    margin-bottom: 5px;
+    margin-top: 5px;
+  }
+
+  .titles h2 {
+    font-weight: 300;
+    font-size: 18px;
+    display: inline-block;
+    margin: 0;
+  }
+
+  .titles a {
+    color: #2e7d32;
+    text-decoration: underline;
+  }
+
+  .titles i {
+    margin-right: 5px;
+    text-decoration: none;
+  }
+
+  .titles .documentation {
+    margin-left: 28px;
+  }
+
+  .subtitle {
+    color: #60ad5e;
+    font-size: 20px;
+    font-weight: 300;
+    margin: 0;
+    /*padding: 13px 0;*/
+    margin-bottom: 20px;
+    font-family: 'Vollkorn', serif;
+  }
+
+  .subtitle h3 {
+    font-size: 22px;
+    font-weight: 400;
+    margin: 0;
+  }
+
+  table {
+    font-size: 14px;
+  }
+
+  table.table tbody tr td {
+    border-top: 0;
+    padding: 10px;
+  }
+
+  .foot {
+    text-align: right;
+    text-align: right;
+    color: #c5c5c5;
+    font-weight: 300;
+  }
+
+  .foot a {
+    color: #8b8b8b;
+    text-decoration: underline;
+  }
+
+  .centered {
+    text-align: center;
+  }
+
+  .text {
+    font-family: 'Vollkorn', serif;
+  }
+
+  @media all and (max-width: 770px) {
+    .titles h1 {
+      font-size: 25px;
+      margin: 15px 0 5px 0;
+    }
+  }
+
+  @media all and (max-width: 640px) {
+    .titles h1 {
+      font-size: 23px;
+      margin: 15px 0 5px 0;
+    }
+    .titles h2 {
+      font-size: 15px;
+    }
+    .titles .documentation {
+      margin-left: 10px;
+    }
+  }
+
+  @media all and (max-width: 530px) {
+    .titles h1 {
+      font-size: 20px;
+      margin: 5px 0;
+    }
+    .logo {
+      padding: 0
+    }
+    .logo img {
+      width: 100%
+    }
+    .titles .documentation {
+      margin-left: 0px;
+      margin-top: 5px;
+      display: block;
+    }
+  }
+
+.svgIcon { display: inline-block;
+    /* size, color, etc. */ }
+
+.svgIconMiddle { vertical-align: middle; }
+
+.svgIcon.svgIconTwitterBlue {
+    border: #55acee!important;
+    fill: #55acee!important;
+}
+
+.avatar {
+    border-radius: 50%;
+}
+
+.avatar-32 {
+    width: 32px;
+    height: 32px;
+    margin: 5px;
+}
+
+.avatar-48 {
+    width: 48px;
+    height: 48px;
+    margin: 0 5px 0 5px;
+}
+
+.avatar-80 {
+    width: 80px;
+    height: 80px;
+}
+
+.author-nickname {
+    color: #657786;
+}

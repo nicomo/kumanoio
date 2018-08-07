@@ -10,6 +10,7 @@ import (
 	"github.com/gobuffalo/buffalo/middleware/csrf"
 	"github.com/gobuffalo/buffalo/middleware/i18n"
 	"github.com/gobuffalo/packr"
+	"github.com/markbates/goth/gothic"
 	"github.com/nicomo/kumano/models"
 )
 
@@ -47,6 +48,9 @@ func App() *buffalo.App {
 		// Remove to disable this.
 		app.Use(middleware.PopTransaction(models.DB))
 
+		// setting the user in the session every page?
+		app.Use(SetCurrentUser)
+
 		// Setup and use translations:
 		var err error
 		if T, err = i18n.New(packr.NewBox("../locales"), "en-US"); err != nil {
@@ -55,6 +59,28 @@ func App() *buffalo.App {
 		app.Use(T.Middleware())
 
 		app.GET("/", HomeHandler)
+
+		// authentication of users
+		auth := app.Group("/auth")
+		auth.GET("/invitation/{invitation_token}", InvitationRedeem)
+		auth.GET("/{provider}", buffalo.WrapHandlerFunc(gothic.BeginAuthHandler))
+		auth.GET("/{provider}/callback", AuthCallback)
+		auth.DELETE("", AuthDestroy)
+
+		app.Resource("/texts", TextsResource{})
+
+		// users routes
+		ur := &UsersResource{}
+		usersGroup := app.Group("/users")
+		usersGroup.Use(LoginRequired)
+		usersGroup.Middleware.Skip(LoginRequired, ur.Show)
+		usersGroup.GET("/", ur.List)                // GET /users => ur.List
+		usersGroup.GET("/new", ur.New)              // GET /users/new => ur.New
+		usersGroup.GET("/{user_id}", ur.Show)       // GET /users/{user_id} => ur.Show
+		usersGroup.GET("/{user_id}/edit", ur.Edit)  // GET /users/{user_id}/edit => ur.Edit
+		usersGroup.POST("/", ur.Create)             // POST /users => ur.Create
+		usersGroup.PUT("/{user_id}", ur.Update)     // PUT /users/{user_id} => ur.Update
+		usersGroup.DELETE("/{user_id}", ur.Destroy) //  DELETE /users/{user_id} => ur.Destroy
 
 		app.ServeFiles("/", assetsBox) // serve files from the public directory
 	}

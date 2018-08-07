@@ -1,0 +1,12 @@
+<h2>Invitation to join Kumano</h2>
+
+<p>Hello,</p>
+<p><a href="http://127.0.0.1/users/<%= sponsorID %>" alt="sponsor profile"><%= sponsorName %></a> 
+    <%= if (sponsorNickname) { %>
+    (a.k.a. <%= sponsorNickname %> )    
+    <% } %>
+    sent you an invitation to join Kumano.</p>
+<p>You can redeem your invitation at <a href="<%= invitationURL %>" alt="invitation URL"><%= invitationURL %></a></p>
+<p>Looking forward to see you there.</p>
+<p>Regards,</p>
+<p>Nicolas (from Kumano)</p>

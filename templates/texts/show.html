@@ -1,0 +1,10 @@
+<div class="page-header">
+  <h1>Text#Show</h1>
+</div>
+
+<ul class="list-unstyled list-inline">
+  <li><a href="<%= textsPath() %>" class="btn btn-info">Back to all Texts</a></li>
+  <li><a href="<%= editTextPath({ text_id: text.ID })%>" class="btn btn-warning">Edit</a></li>
+  <li><a href="<%= textPath({ text_id: text.ID })%>" data-method="DELETE" data-confirm="Are you sure?" class="btn btn-danger">Destroy</a>
+</ul>
+
