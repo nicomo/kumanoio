@@ -1,6 +1,8 @@
 package actions
 
 import (
+	"time"
+
 	"github.com/gobuffalo/buffalo"
 	"github.com/gobuffalo/pop"
 	"github.com/nicomo/kumano/models"
@@ -73,19 +75,23 @@ func (v TextsResource) Show(c buffalo.Context) error {
 // New renders the form for creating a new Text.
 // This function is mapped to the path GET /texts/new
 func (v TextsResource) New(c buffalo.Context) error {
+	user := c.Value("current_user").(*models.User)
+	c = CanPost(user, c)
 	return c.Render(200, r.Auto(c, &models.Text{}))
 }
 
 // Create adds a Text to the DB. This function is mapped to the
 // path POST /texts
 func (v TextsResource) Create(c buffalo.Context) error {
-	// Allocate an empty Text
+	// Allocate an empty Text & get user
 	text := &models.Text{}
+	user := c.Value("current_user").(*models.User)
 
 	// Bind text to the html form elements
 	if err := c.Bind(text); err != nil {
 		return errors.WithStack(err)
 	}
+	text.AuthorID = user.ID
 
 	// Get the DB connection from the context
 	tx, ok := c.Value("tx").(*pop.Connection)
@@ -109,7 +115,15 @@ func (v TextsResource) Create(c buffalo.Context) error {
 	}
 
 	// If there are no errors set a success message
-	c.Flash().Add("success", "Text was created successfully")
+	c.Flash().Add("success", T.Translate(c, "text.created.success"))
+
+	// Add points + date last posted to user
+	user.Score += models.PointsPosts
+	user.LastPostedAt = time.Now()
+	if err := tx.Update(user); err != nil {
+		// TODO: log err server side
+		c.Flash().Add("danger", T.Translate(c, "user.postcredit.failure"))
+	}
 
 	// and redirect to the texts index page
 	return c.Render(201, r.Auto(c, text))
