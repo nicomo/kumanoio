@@ -3,9 +3,9 @@
 
 <%= form_for(user, {action: userPath({ user_id: user.ID }), method: "PUT"}) { %>
   <div class="form-group">
-      <%= f.InputTag("Name", {}) %>
-      <%= f.InputTag("Nickname", {}) %>
-      <%= f.InputTag("Bio", {}) %>
+      <%= f.InputTag("Name", {minlength:"3", maxlength:"50"}) %>
+      <%= f.InputTag("Nickname", {minlength:"3", maxlength:"50"}) %>
+      <%= f.InputTag("Bio", {maxlength:"250"}) %>
   </div>
   <button role="submit" class="btn btn-default">Edit</button>
   <a href="<%= userPath({ user_id: user.ID }) %>" class="btn btn-warning" data-confirm="Are you sure?">Cancel</a>

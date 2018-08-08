@@ -140,8 +140,8 @@ func (v UsersResource) Create(c buffalo.Context) error {
 	emailData := map[string]string{
 		"emailTo":         user.Email.String,
 		"invitationURL":   "http://127.0.0.1:3000/auth/invitation/" + user.InvitationToken,
-		"sponsorName":     sponsor.Name,
-		"sponsorNickname": sponsor.Nickname,
+		"sponsorName":     sponsor.Name.String,
+		"sponsorNickname": sponsor.Nickname.String,
 		"sponsorID":       user.SponsorID.String(),
 	}
 

@@ -1,7 +1,7 @@
 create_table("users", func(t) {
 	t.Column("avatar_url", "string", {"null": true})
 	t.Column("bio", "text", {"null": true})
-	t.Column("email", "string", {})
+	t.Column("email", "string", {"null": true})
 	t.Column("id", "uuid", {"primary": true})
 	t.Column("invitation_token", "string", {})
 	t.Column("invited_at", "timestamptz", {})

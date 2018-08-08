@@ -93,20 +93,20 @@ func AuthCallback(c buffalo.Context) error {
 		}
 
 		// populate user from oauth info
-		u.Name = gothUser.Name
+		u.Name = nulls.NewString(gothUser.Name)
 		u.Provider = nulls.NewString(gothUser.Provider)
 		u.ProviderID = nulls.NewString(gothUser.UserID)
 
 		//		u.Provider = ToNullString(gothUser.Provider)
 		//		u.ProviderID = ToNullString(gothUser.UserID)
-		u.AvatarURL = gothUser.AvatarURL
+		u.AvatarURL = nulls.NewString(gothUser.AvatarURL)
 
 		// retrieve nickname and check if it's unique
 		// generate a random one if it's not
-		u.Nickname = gothUser.NickName
-		u.NickValidate(tx)
-		if u.Nickname != gothUser.NickName {
-			mssg := fmt.Sprintf("@%s was already taken, we used @%s. Hope you like it. You can change it in your profile.", gothUser.NickName, u.Nickname)
+		nick := models.NickValidate(gothUser.NickName, tx)
+		u.Nickname = nulls.NewString(nick)
+		if nick != gothUser.NickName {
+			mssg := fmt.Sprintf("@%s was already taken, we used @%s. Hope you like it. You can change it in your profile.", gothUser.NickName, nick)
 			c.Flash().Add("success", mssg)
 		}
 
@@ -155,9 +155,9 @@ func InvitationRedeem(c buffalo.Context) error {
 	if err := q.First(&user); err != nil {
 		// Either user already has working account (invitation redeemed)
 		// or no invitation at all
-		// either way, redirect to signin with message
+		// either way, redirect to home with message
 		c.Flash().Add("danger", T.Translate(c, "auth.invitation.failure"))
-		return c.Render(403, r.HTML("users/signin"))
+		return c.Render(403, r.HTML("/"))
 	}
 
 	// set current user in session

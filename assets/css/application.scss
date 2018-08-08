@@ -34,7 +34,10 @@ Text on theme colors : #fff
   a.dropdown-item:hover {
       text-decoration: none;
   }
-  
+
+  form.form-inline {
+    margin: 1em 0px;
+  }
   textarea:focus, input:focus {
     border: 2px solid #7b5e57;
   }
