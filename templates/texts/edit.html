@@ -1,8 +1,15 @@
-<div class="page-header">
-  <h1>Edit Text</h1>
-</div>
-
+<%= partial("header.html") %>
 <%= form_for(text, {action: textPath({ text_id: text.ID }), method: "PUT"}) { %>
   <%= partial("texts/form.html") %>
-  <a href="<%= textPath({ text_id: text.ID }) %>" class="btn btn-warning" data-confirm="Are you sure?">Cancel</a>
+  <div class="form-group">
+      <div class="col-sm-offset-2 col-sm-10">
+        <a href="<%= textPath({ text_id: text.ID }) %>" class="btn btn-warning" data-confirm="Are you sure?">Cancel</a>
+        <%= if (text.Draft) { %>
+          <button type="submit" name="Draft" value="true" class="btn btn-default">Save as draft</button>
+        <% } %>
+        <%= if (!text.Draft || user_can_post) { %>
+          <button type="submit" name="Draft" value="false" class="btn btn-success">Save changes</button>
+        <% } %>
+      </div>
+  </div>
 <% } %>

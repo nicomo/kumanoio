@@ -1,10 +1,14 @@
 package actions
 
 import (
+	"fmt"
 	"time"
+
+	"github.com/gobuffalo/uuid"
 
 	"github.com/gobuffalo/buffalo"
 	"github.com/gobuffalo/pop"
+	"github.com/gobuffalo/pop/nulls"
 	"github.com/nicomo/kumano/models"
 	"github.com/pkg/errors"
 )
@@ -52,6 +56,41 @@ func (v TextsResource) List(c buffalo.Context) error {
 	return c.Render(200, r.Auto(c, texts))
 }
 
+// ListDrafts gets all Texts with draft status for a given user
+// mapped to /texts/drafts
+func (v TextsResource) ListDrafts(c buffalo.Context) error {
+	// Get the DB connection from the context
+	tx, ok := c.Value("tx").(*pop.Connection)
+	if !ok {
+		return errors.WithStack(errors.New("no transaction found"))
+	}
+
+	texts := &models.Texts{}
+	uID := c.Session().Get("current_user_id").(uuid.UUID)
+	// Paginate results. Params "page" and "per_page" control pagination.
+	// Default values are "page=1" and "per_page=20".
+	q := tx.PaginateFromParams(c.Params()).Where("draft = ? AND author_id= ?", true, uID)
+
+	// Retrieve all Texts from the DB
+	if err := q.Eager().All(texts); err != nil {
+		return errors.WithStack(err)
+	}
+
+	fmt.Printf("\n--\n%v\n---\n", texts)
+	fmt.Printf("\n--\n%v\n---\n", texts)
+
+	// Add the paginator to the context so it can be used in the template.
+	c.Set("pagination", q.Paginator)
+
+	// FIXME: should simply be return c.Render(200, r.Auto(c, texts))
+	// which is exactly what List() uses
+	// but here it redirects to texts/show.html rather than index
+	// I don't really understand how Auto() interprets the model I passed Texts
+	c.Set("texts", texts)
+	return c.Render(200, r.HTML("texts/index.html"))
+
+}
+
 // Show gets the data for one Text. This function is mapped to
 // the path GET /texts/{text_id}
 func (v TextsResource) Show(c buffalo.Context) error {
@@ -76,7 +115,15 @@ func (v TextsResource) Show(c buffalo.Context) error {
 // This function is mapped to the path GET /texts/new
 func (v TextsResource) New(c buffalo.Context) error {
 	user := c.Value("current_user").(*models.User)
-	c = CanPost(user, c)
+	ok := user.CanPost()
+	if ok {
+		// can edit post regardless
+		c.Set("user_can_post", true)
+	} else {
+		c.Set("user_can_post", false)
+		diff := time.Since(user.LastPostedAt)
+		c.Flash().Add("info", fmt.Sprintf("Slow down (last post was %s ago). You can still work on drafts though.", diff.Truncate(time.Second).String()))
+	}
 	return c.Render(200, r.Auto(c, &models.Text{}))
 }
 
@@ -93,7 +140,7 @@ func (v TextsResource) Create(c buffalo.Context) error {
 	}
 	text.AuthorID = user.ID
 	if !text.Draft {
-		text.PublishedAt = time.Now()
+		text.PublishedAt = nulls.NewTime(time.Now())
 	}
 
 	// Get the DB connection from the context
@@ -135,6 +182,7 @@ func (v TextsResource) Create(c buffalo.Context) error {
 // Edit renders a edit form for a Text. This function is
 // mapped to the path GET /texts/{text_id}/edit
 func (v TextsResource) Edit(c buffalo.Context) error {
+
 	// Get the DB connection from the context
 	tx, ok := c.Value("tx").(*pop.Connection)
 	if !ok {
@@ -146,6 +194,16 @@ func (v TextsResource) Edit(c buffalo.Context) error {
 
 	if err := tx.Find(text, c.Param("text_id")); err != nil {
 		return c.Error(404, err)
+	}
+	user := c.Value("current_user").(*models.User)
+	ok = user.CanPost()
+	if !text.Draft || ok {
+		// can edit post regardless
+		c.Set("user_can_post", true)
+	} else {
+		c.Set("user_can_post", false)
+		diff := time.Since(user.LastPostedAt)
+		c.Flash().Add("info", fmt.Sprintf("Slow down (last post was %s ago). You can still work on drafts though.", diff.Truncate(time.Second).String()))
 	}
 
 	return c.Render(200, r.Auto(c, text))

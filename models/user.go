@@ -122,3 +122,13 @@ func nickGenerate() string {
 	// which would be really unlucky, but still...
 	return suffix
 }
+
+// CanPost checks if user has already posted in last 24 hours
+func (u *User) CanPost() bool {
+	// id est : 1 post per 24 hours max.
+	diff := time.Since(u.LastPostedAt)
+	if diff.Hours() < 24.0 {
+		return false
+	}
+	return true
+}

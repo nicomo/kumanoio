@@ -18,6 +18,8 @@ import (
 // application is being run. Default is "development".
 var ENV = envy.Get("GO_ENV", "development")
 var app *buffalo.App
+
+// T is used to generate translation string throughout the UI
 var T *i18n.Translator
 
 // App is where all routes and middleware for buffalo
@@ -67,7 +69,19 @@ func App() *buffalo.App {
 		auth.GET("/{provider}/callback", AuthCallback)
 		auth.DELETE("", AuthDestroy)
 
-		app.Resource("/texts", TextsResource{})
+		// texts routes
+		tr := &TextsResource{}
+		textsGroup := app.Group("/texts")
+		textsGroup.Use(LoginRequired)
+		textsGroup.Middleware.Skip(LoginRequired, tr.Show, tr.List)
+		textsGroup.GET("/", tr.List)
+		textsGroup.POST("/", tr.Create)
+		textsGroup.GET("/new", tr.New)
+		textsGroup.GET("/drafts", tr.ListDrafts)
+		textsGroup.GET("/{text_id}", tr.Show)
+		textsGroup.GET("/{text_id}/edit", tr.Edit)
+		textsGroup.PUT("/{text_id}", tr.Update)
+		textsGroup.DELETE("/{text_id}", tr.Destroy)
 
 		// users routes
 		ur := &UsersResource{}

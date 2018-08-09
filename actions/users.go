@@ -286,15 +286,16 @@ func LoginRequired(next buffalo.Handler) buffalo.Handler {
 }
 
 // CanPost checks if user has already posted in last 24 hours
+/*
 func CanPost(user *models.User, next buffalo.Context) buffalo.Context {
 	// id est : 1 post per 24 hours max.
 	diff := time.Since(user.LastPostedAt)
 	if diff.Hours() < 24.0 {
-		// FIXME: format time string
-		next.Flash().Add("info", fmt.Sprintf("Slow down (last post was %s ago). You can still work on drafts though.", diff.Truncate(time.Second).String()))
 		next.Set("user_can_post", false)
+		next.Flash().Add("info", fmt.Sprintf("Slow down (last post was %s ago). You can still work on drafts though.", diff.Truncate(time.Second).String()))
 	} else {
 		next.Set("user_can_post", true)
 	}
 	return next
 }
+*/
