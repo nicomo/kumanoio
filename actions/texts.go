@@ -69,15 +69,12 @@ func (v TextsResource) ListDrafts(c buffalo.Context) error {
 	uID := c.Session().Get("current_user_id").(uuid.UUID)
 	// Paginate results. Params "page" and "per_page" control pagination.
 	// Default values are "page=1" and "per_page=20".
-	q := tx.PaginateFromParams(c.Params()).Where("draft = ? AND author_id= ?", true, uID)
+	q := tx.PaginateFromParams(c.Params()).Where("draft = ? AND author_id= ?", true, uID).Order("created_at desc")
 
 	// Retrieve all Texts from the DB
 	if err := q.Eager().All(texts); err != nil {
 		return errors.WithStack(err)
 	}
-
-	fmt.Printf("\n--\n%v\n---\n", texts)
-	fmt.Printf("\n--\n%v\n---\n", texts)
 
 	// Add the paginator to the context so it can be used in the template.
 	c.Set("pagination", q.Paginator)
@@ -89,6 +86,36 @@ func (v TextsResource) ListDrafts(c buffalo.Context) error {
 	c.Set("texts", texts)
 	return c.Render(200, r.HTML("texts/index.html"))
 
+}
+
+// ListUserTexts gets all published Texts for a given user
+// mapped to /texts/{user_id}
+func (v TextsResource) ListUserTexts(c buffalo.Context) error {
+	// Get the DB connection from the context
+	tx, ok := c.Value("tx").(*pop.Connection)
+	if !ok {
+		return errors.WithStack(errors.New("no transaction found"))
+	}
+
+	texts := &models.Texts{}
+	// Paginate results. Params "page" and "per_page" control pagination.
+	// Default values are "page=1" and "per_page=20".
+	q := tx.PaginateFromParams(c.Params()).Where("draft = ? AND author_id= ?", false, c.Param("user_id")).Order("created_at desc")
+
+	// Retrieve all Texts from the DB
+	if err := q.Eager().All(texts); err != nil {
+		return errors.WithStack(err)
+	}
+
+	// Add the paginator to the context so it can be used in the template.
+	c.Set("pagination", q.Paginator)
+
+	// FIXME: should simply be return c.Render(200, r.Auto(c, texts))
+	// which is exactly what List() uses
+	// but here it redirects to texts/show.html rather than index
+	// I don't really understand how Auto() interprets the model I passed Texts
+	c.Set("texts", texts)
+	return c.Render(200, r.HTML("texts/index.html"))
 }
 
 // Show gets the data for one Text. This function is mapped to

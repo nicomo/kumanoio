@@ -4,8 +4,12 @@
   <a href="<%= textPath({ text_id: text.ID }) %>"><h2><%= text.Title %></h2></a>
   <small>by <a href="<%= userPath({user_id: text.AuthorID}) %>">
     <%= text.Author.Name %></a>
-    (@<%= text.Author.Nickname %>)
-    on <%= text.PublishedAt %>
+    (@<%= text.Author.Nickname %>) on
+    <%= if (text.Draft) { %> 
+      <%= text.CreatedAt %> 
+    <% } else { %>
+      <%= text.PublishedAt %>
+    <% } %>
     </small>
   <p><%= truncate(text.Content, {"size": 100}) %></p>
   <%= if (current_user.ID.String() == text.AuthorID.String()) { %>

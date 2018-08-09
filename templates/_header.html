@@ -17,6 +17,7 @@
                         
                         <ul class="dropdown-menu" >
                             <li><a class="dropdown-item" href="<%= userPath({user_id: current_user.ID}) %>">Profile</a></li>
+                            <li><a class="dropdown-item" href="<%= textsUserPath({user_id: current_user.ID}) %>">My texts</a></li>
                             <li><a class="dropdown-item" href="<%= textsDraftsPath() %>">My drafts</a></li>
                             <li><a class="dropdown-item" href="/auth" data-method="DELETE">Log Out</a></li>
                         </ul>

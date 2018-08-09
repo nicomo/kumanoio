@@ -78,6 +78,7 @@ func App() *buffalo.App {
 		textsGroup.POST("/", tr.Create)
 		textsGroup.GET("/new", tr.New)
 		textsGroup.GET("/drafts", tr.ListDrafts)
+		textsGroup.GET("/user/{user_id}", tr.ListUserTexts)
 		textsGroup.GET("/{text_id}", tr.Show)
 		textsGroup.GET("/{text_id}/edit", tr.Edit)
 		textsGroup.PUT("/{text_id}", tr.Update)
