@@ -1,0 +1,3 @@
+add_column("texts", "published_at", "timestamptz", {})
+change_column("texts", "updated_at", "timestamptz", {})
+change_column("texts", "created_at", "timestamptz", {})

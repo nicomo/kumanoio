@@ -11,14 +11,15 @@ import (
 
 // Text is the base struct for content on our site
 type Text struct {
-	ID        uuid.UUID `json:"id" db:"id"`
-	CreatedAt time.Time `json:"created_at" db:"created_at"`
-	UpdatedAt time.Time `json:"updated_at" db:"updated_at"`
-	Title     string    `json:"title" db:"title"`
-	Content   string    `json:"content" db:"content"`
-	Author    User      `belongs_to:"user"`
-	AuthorID  uuid.UUID `json:"author_id" db:"author_id"`
-	Draft     bool      `json:"draft" db:"draft"`
+	ID          uuid.UUID `json:"id" db:"id"`
+	CreatedAt   time.Time `json:"created_at" db:"created_at"`
+	PublishedAt time.Time `json:"published_at" db:"published_at"`
+	UpdatedAt   time.Time `json:"updated_at" db:"updated_at"`
+	Title       string    `json:"title" db:"title"`
+	Content     string    `json:"content" db:"content"`
+	Author      User      `belongs_to:"user"`
+	AuthorID    uuid.UUID `json:"author_id" db:"author_id"`
+	Draft       bool      `json:"draft" db:"draft"`
 }
 
 // String is not required by pop and may be deleted

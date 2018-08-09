@@ -39,10 +39,10 @@ func (v TextsResource) List(c buffalo.Context) error {
 
 	// Paginate results. Params "page" and "per_page" control pagination.
 	// Default values are "page=1" and "per_page=20".
-	q := tx.PaginateFromParams(c.Params())
+	q := tx.PaginateFromParams(c.Params()).Where("draft = ?", false)
 
 	// Retrieve all Texts from the DB
-	if err := q.All(texts); err != nil {
+	if err := q.Eager().All(texts); err != nil {
 		return errors.WithStack(err)
 	}
 
@@ -92,6 +92,9 @@ func (v TextsResource) Create(c buffalo.Context) error {
 		return errors.WithStack(err)
 	}
 	text.AuthorID = user.ID
+	if !text.Draft {
+		text.PublishedAt = time.Now()
+	}
 
 	// Get the DB connection from the context
 	tx, ok := c.Value("tx").(*pop.Connection)

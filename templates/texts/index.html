@@ -1,29 +1,16 @@
-<div class="page-header">
-  <h1>Texts</h1>
-</div>
-<ul class="list-unstyled list-inline">
-  <li><a href="<%= newTextsPath() %>" class="btn btn-primary">Create New Text</a></li>
-</ul>
+<%= partial("header.html") %>
 
-<table class="table table-striped">
-  <thead>
-  <th>&nbsp;</th>
-  </thead>
-  <tbody>
-    <%= for (text) in texts { %>
-      <tr>
-      <td>
-          <div class="pull-right">
-            <a href="<%= textPath({ text_id: text.ID }) %>" class="btn btn-info">View</a>
-            <a href="<%= editTextPath({ text_id: text.ID }) %>" class="btn btn-warning">Edit</a>
-            <a href="<%= textPath({ text_id: text.ID }) %>" data-method="DELETE" data-confirm="Are you sure?" class="btn btn-danger">Destroy</a>
-          </div>
-        </td>
-      </tr>
-    <% } %>
-  </tbody>
-</table>
-
-<div class="text-center">
-  <%= paginator(pagination) %>
-</div>
+<%= for (text) in texts { %>
+  <a href="<%= textPath({ text_id: text.ID }) %>"><h2><%= text.Title %></h2></a>
+  <small>by <a href="<%= userPath({user_id: text.AuthorID}) %>">
+    <%= text.Author.Name %></a>
+    (@<%= text.Author.Nickname %>)
+    on <%= text.PublishedAt %>
+    </small>
+  <p><%= truncate(text.Content, {"size": 100}) %></p>
+  <%= if (current_user.ID.String() == text.AuthorID.String()) { %>
+      <a href="<%= editTextPath({ text_id: text.ID }) %>" class="btn btn-default">✏️ Edit</a>
+      <a href="<%= textPath({ text_id: text.ID }) %>" data-method="DELETE" data-confirm="Are you sure?" class="btn btn-danger">Delete</a>
+  <% } %>
+<% } %>
+<%= paginator(pagination) %>
