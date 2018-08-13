@@ -131,7 +131,7 @@ func (v TextsResource) Show(c buffalo.Context) error {
 	text := &models.Text{}
 
 	// To find the Text the parameter text_id is used.
-	if err := tx.Find(text, c.Param("text_id")); err != nil {
+	if err := tx.Eager().Find(text, c.Param("text_id")); err != nil {
 		return c.Error(404, err)
 	}
 
@@ -304,4 +304,45 @@ func (v TextsResource) Destroy(c buffalo.Context) error {
 
 	// Redirect to the texts index page
 	return c.Render(200, r.Auto(c, text))
+}
+
+// StarHandler when a user stars a text
+func StarHandler(c buffalo.Context) error {
+
+	// Get the DB connection from the context
+	tx, ok := c.Value("tx").(*pop.Connection)
+	if !ok {
+		return errors.WithStack(errors.New("no transaction found"))
+	}
+
+	// Allocate an empty Text
+	text := &models.Text{}
+
+	if err := tx.Find(text, c.Param("text_id")); err != nil {
+		return c.Error(404, err)
+	}
+
+	star := &models.Star{
+		ID:        uuid.Must(uuid.NewV4()),
+		CreatedAt: time.Now(),
+		UpdatedAt: time.Now(),
+		UserID:    c.Session().Get("current_user_id").(uuid.UUID),
+		TextID:    text.ID,
+	}
+
+	// TODO: userid+textid should be unique
+
+	verrs, err := tx.ValidateAndCreate(star)
+	if err != nil {
+		return errors.WithStack(err)
+	}
+	if verrs.HasAny() {
+		// Make the errors available inside the html template
+		c.Set("errors", verrs)
+		fmt.Printf("\n#### verrs ####\n%v\n#### star ####\n", verrs)
+		// Render again.
+		return c.Render(422, r.Auto(c, text))
+	}
+
+	return c.Redirect(200, "/")
 }

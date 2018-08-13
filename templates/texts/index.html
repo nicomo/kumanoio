@@ -1,20 +1,23 @@
 <%= partial("header.html") %>
 
 <%= for (text) in texts { %>
-  <a href="<%= textPath({ text_id: text.ID }) %>"><h2><%= text.Title %></h2></a>
-  <small>by <a href="<%= userPath({user_id: text.AuthorID}) %>">
-    <%= text.Author.Name %></a>
-    (@<%= text.Author.Nickname %>) on
-    <%= if (text.Draft) { %> 
-      <%= text.CreatedAt %> 
-    <% } else { %>
-      <%= text.PublishedAt %>
-    <% } %>
-    </small>
-  <p><%= truncate(text.Content, {"size": 100}) %></p>
+  <div class="row">
+    <div class="col-md-8 text-header">
+      <h2 class="titles"><a href="<%= textPath({ text_id: text.ID }) %>"><%= text.Title %></a></h2>
+      <%= partial("texts/author_short.html", {text: text}) %>
+      <%= if (len(text.StarredBy) > 0) { %>
+        <p>
+          [<span class="glyphicon glyphicon-star"></span>
+          <small><%= len(text.StarredBy) %></small>]
+        </p>
+      <% } %>
+    </div>
+  </div>
+  
+  <p class="text"><%= truncate(text.Content, {"size": 100}) %></p>
   <%= if (current_user.ID.String() == text.AuthorID.String()) { %>
-      <a href="<%= editTextPath({ text_id: text.ID }) %>" class="btn btn-default">✏️ Edit</a>
-      <a href="<%= textPath({ text_id: text.ID }) %>" data-method="DELETE" data-confirm="Are you sure?" class="btn btn-danger">Delete</a>
-  <% } %>
+    <a href="<%= editTextPath({ text_id: text.ID }) %>" class="btn btn-default">✏️ Edit</a>
+    <a href="<%= textPath({ text_id: text.ID }) %>" data-method="DELETE" data-confirm="Are you sure?" class="btn btn-danger">Delete</a>
+  <% } else { %>
 <% } %>
 <%= paginator(pagination) %>

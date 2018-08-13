@@ -1,9 +1,29 @@
 <%= partial("header.html") %>
-<h2><%= text.Title %></h2>
-<p><%= markdown(text.Content) %></p>
-<ul class="list-unstyled list-inline">
-  <%= if (current_user.ID.String() == text.AuthorID.String()) { %>
-    <li><a href="<%= editTextPath({ text_id: text.ID })%>" class="btn btn-warning">Edit</a></li>
-    <li><a href="<%= textPath({ text_id: text.ID })%>" data-method="DELETE" data-confirm="Are you sure?" class="btn btn-danger">Destroy</a>
-  <% } %>
-</ul>
+
+<h2 class="titles"><%= text.Title %></h2>
+
+<%= partial("texts/author_short.html", {text: text}) %>
+
+<%= if (len(text.StarredBy) > 0) { %>
+  <p>
+    [<span class="glyphicon glyphicon-star"></span>
+    <small><%= len(text.StarredBy) %></small>]
+  </p>
+<% } %>
+
+<p class="text"><%= markdown(text.Content) %></p>
+
+<%= if (is_logged_in()) { %>
+  <ul class="list-unstyled list-inline">
+    <%= if (current_user.ID.String() == text.AuthorID.String()) { %>
+      <li><a href="<%= editTextPath({ text_id: text.ID })%>" class="btn btn-warning">Edit</a></li>
+      <li><a href="<%= textPath({ text_id: text.ID })%>" data-method="DELETE" data-confirm="Are you sure?" class="btn btn-danger">Destroy</a>
+    <% } else { %>
+
+      <!-- TODO: if user has already starred this text, she shouldn't be able to star it again -->
+      <a href="#" id="star-text" data-star-textid="<%= text.ID %>" class="btn btn-default"><span id="glyph-star" class="glyphicon glyphicon-star-empty"></span> Star</a>
+      <!-- TODO: implement flagging of posts, see star -->
+      <a href="#" id="flag-text" class="btn"><span class="glyphicon glyphicon-flag"></span> Flag</a>
+    <% } %>
+  </ul>
+<% } %>

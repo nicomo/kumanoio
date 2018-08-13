@@ -1,6 +1,5 @@
 @import "~bootstrap-sass/assets/stylesheets/_bootstrap-sprockets.scss";
 @import "~bootstrap-sass/assets/stylesheets/_bootstrap.scss";
-@import "~font-awesome/css/font-awesome.css";
 @import url('https://fonts.googleapis.com/css?family=Roboto:400,700|Vollkorn:400,400i&subset=latin-ext');
 
 
@@ -14,6 +13,14 @@ Secondary color dark : #260e04
 Text on theme colors : #fff
 */
 
+  .text-header {
+    margin-bottom: 1em;
+  }
+
+  h2.titles {
+    color: #005005;
+    font-family: 'Vollkorn', serif;
+  }
 
   body {
       font-family: 'Roboto', sans-serif;        
@@ -66,7 +73,7 @@ Text on theme colors : #fff
   .titles h1 {
     font-size: 30px;
     font-weight: 300;
-    color: #2e7d32;
+    color: #60ad5e;
     margin-bottom: 5px;
     margin-top: 5px;
   }
@@ -76,11 +83,6 @@ Text on theme colors : #fff
     font-size: 18px;
     display: inline-block;
     margin: 0;
-  }
-
-  .titles a {
-    color: #2e7d32;
-    text-decoration: underline;
   }
 
   .titles i {
@@ -131,10 +133,6 @@ Text on theme colors : #fff
 
   .centered {
     text-align: center;
-  }
-
-  .text {
-    font-family: 'Vollkorn', serif;
   }
 
   @media all and (max-width: 770px) {

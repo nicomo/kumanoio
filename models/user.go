@@ -49,6 +49,7 @@ type User struct {
 	SponsorID         uuid.UUID    `json:"sponsor_id" db:"sponsor_id"`
 	Sponsoring        Users        `has_many:"users"`
 	Texts             Texts        `has_many:"texts" order_by:"created_at desc"`
+	Starred           Texts        `many_to_many:"stars" db:"-"`
 }
 
 // String is not required by pop and may be deleted

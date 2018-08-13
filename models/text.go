@@ -22,6 +22,7 @@ type Text struct {
 	Author      User       `belongs_to:"user"`
 	AuthorID    uuid.UUID  `json:"author_id" db:"author_id"`
 	Draft       bool       `json:"draft" db:"draft"`
+	StarredBy   Users      `many_to_many:"stars" db:"-"`
 }
 
 // String is not required by pop and may be deleted

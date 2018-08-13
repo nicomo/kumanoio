@@ -50,7 +50,7 @@ func App() *buffalo.App {
 		// Remove to disable this.
 		app.Use(middleware.PopTransaction(models.DB))
 
-		// setting the user in the session every page?
+		// setting the user in the session
 		app.Use(SetCurrentUser)
 
 		// Setup and use translations:
@@ -60,6 +60,7 @@ func App() *buffalo.App {
 		}
 		app.Use(T.Middleware())
 
+		//ROUTING
 		app.GET("/", HomeHandler)
 
 		// authentication of users
@@ -69,7 +70,13 @@ func App() *buffalo.App {
 		auth.GET("/{provider}/callback", AuthCallback)
 		auth.DELETE("", AuthDestroy)
 
+		//
 		// texts routes
+		//
+		// single pages, not linked to text model directly
+		app.POST("/texts/{text_id}/star", StarHandler)
+
+		// texts group routes
 		tr := &TextsResource{}
 		textsGroup := app.Group("/texts")
 		textsGroup.Use(LoginRequired)

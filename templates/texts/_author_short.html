@@ -1,0 +1,9 @@
+<small>by <a href="<%= userPath({user_id: text.AuthorID}) %>">
+    <%= text.Author.Name %></a>
+    (@<%= text.Author.Nickname %>) on
+    <%= if (text.Draft) { %> 
+        <%= text.CreatedAt %> 
+    <% } else { %>
+        <%= text.PublishedAt %>
+    <% } %>
+</small>

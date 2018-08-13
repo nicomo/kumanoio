@@ -23,7 +23,7 @@ func init() {
 	var err error
 	sender, err := mail.NewSMTPSender(host, port, user, password)
 
-	// FIXME: switch to TLS/SSL 
+	// FIXME: switch to TLS/SSL
 	// see https://support.google.com/accounts/answer/6010255
 	// https://gobuffalo.io/en/docs/mail/
 	// port 587 with TLS
